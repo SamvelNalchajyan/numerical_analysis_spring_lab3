@@ -183,12 +183,45 @@ double function_dg(double x, double t)
 {
 	std::vector<double> A;
 	std::vector<double> B;
+	/*
 	for (int i = 0; i < 14; i++)
 	{
 		A.push_back(FRand(-1, 1));
 		B.push_back(FRand(-1, 1));
 	}
-	double alpha = FRand(0, 1);
+	*/
+	A.push_back(-0.997497);
+	A.push_back(0.127171);
+	A.push_back(-0.613392);
+	A.push_back(0.617481);
+	A.push_back(0.170019);
+	A.push_back(-0.0402539);
+	A.push_back(-0.299417);
+	A.push_back(0.791925);
+	A.push_back(0.64568);
+	A.push_back(0.49321);
+	A.push_back(-0.651784);
+	A.push_back(0.717887);
+	A.push_back(0.421003);
+	A.push_back(0.0270699);
+
+	B.push_back(-0.39201);
+	B.push_back(-0.970031);
+	B.push_back(-0.817194);
+	B.push_back(-0.271096);
+	B.push_back(-0.705374);
+	B.push_back(-0.668203);
+	B.push_back(0.97705);
+	B.push_back(-0.108615);
+	B.push_back(-0.761834);
+	B.push_back(-0.990661);
+	B.push_back(-0.982177);
+	B.push_back(-0.24424);
+	B.push_back(0.0633259);
+	B.push_back(0.142369);
+
+	//double alpha = FRand(0, 1);
+	double alpha = 0.601764;
 	
 
 	double dg = 0;

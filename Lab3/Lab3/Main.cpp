@@ -36,7 +36,7 @@ int main()
 	//double tmp = MyPi / 3.0;
 	//std::cout << function_dg(0.5, tmp) << std::endl;
 	
-	double eps2 = 4;
+	double eps2 = 0.00001;
 	std::cout << "Функция g:" << std::endl;
 	double h = 0.1;
 	double x = 0;
@@ -47,6 +47,21 @@ int main()
 	}
 	std::cout << std::endl;
 	
+	/*
+	std::cout << "A[i]: " << std::endl;
+	for (int i = 0; i < 14; i++)
+	{
+		std::cout << FRand(-1, 1) << " | ";
+	}
+	std::cout << std::endl;
+	std::cout << "B[i]: " << std::endl;
+	for (int i = 0; i < 14; i++)
+	{
+		std::cout << FRand(-1, 1) << " | ";
+	}
+	std::cout << std::endl;
+	std::cout << "alpha: " << FRand(0, 1) << std::endl;
+	*/
 
 	system("pause");
 	return 0;
