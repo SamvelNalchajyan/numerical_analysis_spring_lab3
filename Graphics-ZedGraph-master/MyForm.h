@@ -1,5 +1,6 @@
 #pragma once
 //#include <math.h>
+#include <ctime>
 #include "../Lab3/Lab3/Algorithms.h"
 
 namespace Graph {
@@ -100,6 +101,9 @@ namespace Graph {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ F_1;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ F_2;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column1;
+	private: System::Windows::Forms::Button^ button2;
+	private: System::Windows::Forms::TextBox^ textBox_eps;
+	private: System::Windows::Forms::Label^ label16;
 
 
 
@@ -187,6 +191,9 @@ namespace Graph {
 			this->label13 = (gcnew System::Windows::Forms::Label());
 			this->label14 = (gcnew System::Windows::Forms::Label());
 			this->label15 = (gcnew System::Windows::Forms::Label());
+			this->button2 = (gcnew System::Windows::Forms::Button());
+			this->textBox_eps = (gcnew System::Windows::Forms::TextBox());
+			this->label16 = (gcnew System::Windows::Forms::Label());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -211,7 +218,7 @@ namespace Graph {
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(142, 29);
 			this->button1->TabIndex = 1;
-			this->button1->Text = L"Draw";
+			this->button1->Text = L"Task 1";
 			this->button1->UseVisualStyleBackColor = true;
 			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
 			// 
@@ -583,11 +590,41 @@ namespace Graph {
 			this->label15->TabIndex = 43;
 			this->label15->Text = L"Error";
 			// 
+			// button2
+			// 
+			this->button2->Location = System::Drawing::Point(228, 597);
+			this->button2->Name = L"button2";
+			this->button2->Size = System::Drawing::Size(142, 29);
+			this->button2->TabIndex = 44;
+			this->button2->Text = L"Task 2";
+			this->button2->UseVisualStyleBackColor = true;
+			this->button2->Click += gcnew System::EventHandler(this, &MyForm::button2_Click_1);
+			// 
+			// textBox_eps
+			// 
+			this->textBox_eps->Location = System::Drawing::Point(270, 571);
+			this->textBox_eps->Name = L"textBox_eps";
+			this->textBox_eps->Size = System::Drawing::Size(100, 20);
+			this->textBox_eps->TabIndex = 45;
+			this->textBox_eps->Text = L"0,0001";
+			// 
+			// label16
+			// 
+			this->label16->AutoSize = true;
+			this->label16->Location = System::Drawing::Point(223, 574);
+			this->label16->Name = L"label16";
+			this->label16->Size = System::Drawing::Size(41, 13);
+			this->label16->TabIndex = 46;
+			this->label16->Text = L"Epsilon";
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1361, 662);
+			this->Controls->Add(this->label16);
+			this->Controls->Add(this->textBox_eps);
+			this->Controls->Add(this->button2);
 			this->Controls->Add(this->label15);
 			this->Controls->Add(this->label12);
 			this->Controls->Add(this->label13);
@@ -790,6 +827,75 @@ private: System::Void button2_Click(System::Object^  sender, System::EventArgs^ 
 
 }
 private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void button2_Click_1(System::Object^ sender, System::EventArgs^ e) {
+	GraphPane^ panel = zedGraphControl1->GraphPane;
+	panel->CurveList->Clear();
+	PointPairList^ f1_list = gcnew ZedGraph::PointPairList();
+	PointPairList^ f2_list = gcnew ZedGraph::PointPairList();
+
+	double xmin = 0;
+	double xmax = 1;
+
+	double n = Convert::ToDouble(textBox3->Text);
+	double h = (xmax - xmin) / n;
+
+	double xmin_limit = xmin - 0.1;
+	double xmax_limit = xmax + 0.1;
+
+	double eps = Convert::ToDouble(textBox_eps->Text);
+
+	unsigned int start_time, end_time;
+
+	std::vector<double> A;
+	std::vector<double> B;
+	
+	for (int i = 0; i < 14; i++)
+	{
+		A.push_back(FRand(-1, 1));
+		B.push_back(FRand(-1, 1));
+	}
+	
+	double alpha = FRand(0, 1);
+
+	int i = 0;
+	dataGridView1->Rows->Clear();
+
+	double g_x = 0;
+	double T_x = 0;
+	for (double x = xmin; x <= xmax; x += h)
+	{
+		start_time = clock();
+		g_x = function_g(x, eps, A, B, alpha);
+		end_time = clock();
+		T_x = (end_time - start_time) / 10.0;
+		//Добавление на график
+		f1_list->Add(x, g_x);
+		f2_list->Add(x, T_x);
+		
+		/*
+		//Печать в таблицу
+		dataGridView1->Rows->Add();
+		dataGridView1->Rows[i]->Cells[0]->Value = x;
+		dataGridView1->Rows[i]->Cells[1]->Value = floor(f1(x) * 1000) / 1000;
+		dataGridView1->Rows[i]->Cells[2]->Value = floor(f2(x) * 1000) / 1000;
+		*/
+		i++;
+	}
+
+
+	LineItem Curve1 = panel->AddCurve("g(x)", f1_list, Color::Red, SymbolType::None);
+	LineItem Curve2 = panel->AddCurve("T(x)", f2_list, Color::Blue, SymbolType::None);
+
+	panel->XAxis->Scale->Min = xmin_limit;
+	panel->XAxis->Scale->Max = xmax_limit;
+
+	// Вызываем метод AxisChange (), чтобы обновить данные об осях. 
+		// В противном случае на рисунке будет показана только часть графика, 
+		// которая умещается в интервалы по осям, установленные по умолчанию
+	zedGraphControl1->AxisChange();
+	// Обновляем график
+	zedGraphControl1->Invalidate();
 }
 };
 }

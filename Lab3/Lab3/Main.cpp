@@ -35,7 +35,7 @@ int main()
 	//std::cout << "Ôóíêöèÿ dg:" << std::endl;
 	//double tmp = MyPi / 3.0;
 	//std::cout << function_dg(0.5, tmp) << std::endl;
-	
+	/*
 	double eps2 = 0.00001;
 	std::cout << "Ôóíêöèÿ g:" << std::endl;
 	double h = 0.1;
@@ -46,7 +46,7 @@ int main()
 		x += h;
 	}
 	std::cout << std::endl;
-	
+	*/
 	/*
 	std::cout << "A[i]: " << std::endl;
 	for (int i = 0; i < 14; i++)

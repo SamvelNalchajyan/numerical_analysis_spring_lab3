@@ -179,10 +179,10 @@ double FRand(double min, double max)
 	return min + tmp * (max - min);
 }
 
-double function_dg(double x, double t)
+double function_dg(double x, double t, std::vector<double> A, std::vector<double> B, double alpha)
 {
-	std::vector<double> A;
-	std::vector<double> B;
+	//std::vector<double> A;
+	//std::vector<double> B;
 	/*
 	for (int i = 0; i < 14; i++)
 	{
@@ -190,6 +190,7 @@ double function_dg(double x, double t)
 		B.push_back(FRand(-1, 1));
 	}
 	*/
+	/*
 	A.push_back(-0.997497);
 	A.push_back(0.127171);
 	A.push_back(-0.613392);
@@ -222,7 +223,7 @@ double function_dg(double x, double t)
 
 	//double alpha = FRand(0, 1);
 	double alpha = 0.601764;
-	
+	*/
 
 	double dg = 0;
 	for (int i = 0; i < 14; i++)
@@ -232,30 +233,30 @@ double function_dg(double x, double t)
 	return dg;
 }
 
-double Simpson_for_task_2(double x, double a, double b)
+double Simpson_for_task_2(double x, double a, double b, std::vector<double> A, std::vector<double> B, double alpha)
 {
 	double I = 0;
 	double h = (b - a) / 2.0;
-	I = (h / 3.0) * (function_dg(x, a) + 4 * function_dg(x, a + h) + function_dg(x, b));
+	I = (h / 3.0) * (function_dg(x, a, A, B, alpha) + 4 * function_dg(x, a + h, A, B, alpha) + function_dg(x, b, A, B, alpha));
 	return I;
 }
 
-double Adaptive_Simpson_for_task_2(double x, double a, double b, double eps)
+double Adaptive_Simpson_for_task_2(double x, double a, double b, double eps, std::vector<double> A, std::vector<double> B, double alpha)
 {
 	double mid = (a + b) / 2.0;
-	double I = Simpson_for_task_2(x, a, b);
-	double I_left = Simpson_for_task_2(x, a, mid);
-	double I_right = Simpson_for_task_2(x, mid, b);
+	double I = Simpson_for_task_2(x, a, b, A, B, alpha);
+	double I_left = Simpson_for_task_2(x, a, mid, A, B, alpha);
+	double I_right = Simpson_for_task_2(x, mid, b, A, B, alpha);
 	if (fabs(I_left + I_right - I) >= eps)
 	{
-		I = Adaptive_Simpson_for_task_2(x, a, mid, eps / 2.0) + Adaptive_Simpson_for_task_2(x, mid, b, eps / 2.0);
+		I = Adaptive_Simpson_for_task_2(x, a, mid, eps / 2.0, A, B, alpha) + Adaptive_Simpson_for_task_2(x, mid, b, eps / 2.0, A, B, alpha);
 	}
 	return I;
 }
 
-double function_g(double x, double eps)
+double function_g(double x, double eps, std::vector<double> A, std::vector<double> B, double alpha)
 {
-	double res = Adaptive_Simpson_for_task_2(x, -MyPi / 2.0, MyPi / 2.0, eps);
+	double res = Adaptive_Simpson_for_task_2(x, -MyPi / 2.0, MyPi / 2.0, eps, A, B, alpha);
 	//double res = Simpson_for_task_2(x, -MyPi / 2.0, MyPi / 2.0);
 	return res;
 }
